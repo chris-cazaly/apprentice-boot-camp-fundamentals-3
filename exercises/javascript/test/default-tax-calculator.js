@@ -17,6 +17,8 @@ let DefaultTaxCalculator = class DefaultTaxCalculator extends TaxCalculator {
     const maxIntervals = [0, 50, 75, 90,  100, 110, 130, 150, 170, 190, 225,  255, 1000000]
     const petrolPrices = [0, 10, 25, 105, 125, 145, 165, 205, 515, 830, 1240, 1760, 2070]
     const isStory4Enabled = true;
+    const isStory5Enabled = true;
+
 
     if (isStory4Enabled) {
       if (this.getYear() > year) {
@@ -35,7 +37,20 @@ let DefaultTaxCalculator = class DefaultTaxCalculator extends TaxCalculator {
       }
     }
     
-    if (fuelType == FuelType.PETROL) {
+
+    if (isStory5Enabled) {
+      if (this.getYear() > year) {
+        if (fuelType == FuelType.PETROL || fuelType == FuelType.DIESEL) {
+          return 450
+        } else if (fuelType == FuelType.ELECTRIC) {
+          return 310
+        } else if (fuelType == FuelType.ALTERNATIVE_FUEL) {
+          return 440
+        }
+      }
+    }    
+
+      if (fuelType == FuelType.PETROL) {
         const index = maxIntervals.findIndex(interval => co2 <= interval);
         return petrolPrices[index];
 
@@ -71,6 +86,7 @@ let DefaultTaxCalculator = class DefaultTaxCalculator extends TaxCalculator {
       }
   }
 }
+
 
 module.exports = {
   DefaultTaxCalculator: DefaultTaxCalculator
