@@ -8,38 +8,36 @@ let DefaultTaxCalculator = class DefaultTaxCalculator extends TaxCalculator {
   constructor() {
     super();
   } 
-  calculateTax(vehicle) {
-      const co2 = vehicle.co2Emissions;
 
-      if (vehicle.fuelType == FuelType.DIESEL) {
-          if (co2 <= 0) return 0;
-        else if (co2 <= 50) return 25
-        else if (co2 <= 75) return 105
-        else if (co2 <= 90) return 125
-        else if (co2 <= 100) return 145
-        else if (co2 <= 110) return 165
-        else if (co2 <= 130) return 205
-        else if (co2 <= 150) return 515
-        else if (co2 <= 170) return 830
-        else if (co2 <= 190) return 1240
-        else if (co2 <= 225) return 1760
-        else if (co2 <= 255) return 2070
-        else return 2070
-      } else {
-      if (co2 <= 0) return 0;
-      else if (co2 <= 50) return 10
-      else if (co2 <= 75) return 25
-      else if (co2 <= 90) return 105
-      else if (co2 <= 100) return 125
-      else if (co2 <= 110) return 145
-      else if (co2 <= 130) return 165
-      else if (co2 <= 150) return 205
-      else if (co2 <= 170) return 515
-      else if (co2 <= 190) return 830
-      else if (co2 <= 225) return 1240
-      else if (co2 <= 255) return 1760
-      else return 2070
-    }
+    calculateTax(vehicle) {
+      let taxPrice;
+      const {co2Emissions, fuelType} = vehicle;
+
+      const taxPrices = {
+        'Petrol' : {
+          256: 2070,
+          226: 1760,
+          191: 1240,
+          171: 830,
+          151: 515,
+          131: 205,
+          111: 165,
+          101: 145,
+          91: 125,
+          76: 105,
+          51: 25,
+          1: 10,
+          0: 0
+        }
+      }
+      
+      const vehicleCo2 = Object.keys(taxPrices[fuelType])
+              .sort((a,b) => b - a)
+              .find(element => co2Emissions >= element);
+
+      taxPrice = taxPrices[fuelType][vehicleCo2];
+
+      return taxPrice;
   }
 }
 
